@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="../common/header.jsp"/>
+<section>
+	<div>
+		<h1>자바스크립트</h1>
+		<input type="text" name="name" id="name"/> <br/>
+		<input type="number" name="age" id="age"/> <br/>
+		<input type="button" id="btn" value="확인"/> <br/>
+		<div id="box"></div>
+	</div>
+</section>
+<script>
+	/*  Ajax : Asyncronized Javascript And XML
+		전체 페이지를 다시 로드 하지 않고 부분적으로 서버와 데이터를 교환하는 것
+		요청을 하고 응답이 오기를 기다렸다가 다음 작업을 처리하는 방식.
+		비동기적 : 용청을 보내고 응답 결과가 전달되기 전에 바로 다음일을 수행하는 방식
+		ajax의 핵심기술은 마소에서 개발한 XMLHttpRequest
+	*/
+	
+	var httpRequest;
+	document.getElementById("btn").onclick = function(){
+		makeRequest('user.test');
+		console.log('makeRequest function 종료');
+	};
+	
+	function makeRequest(url){
+		httpRequest = new XMLHttpRequest();
+		if(!httpRequest){
+			alert('XMLHttp 객체 ㅇㄷ?');
+			return false;
+		}
+		console.log('생성완료');
+		
+		var name = document.getElementById("name").value;
+		var age = document.getElementById("age").value;
+		
+		httpRequest.open('GET',url+"?name="+name+"&age="+age);
+		httpRequest.onreadystatechange = setContents;
+		httpRequest.send();
+	}
+	
+	function setContents(){
+		/*
+			0 (uninitialized) - request가 아직 초기화 되지 않음
+			1 (loading)		  - 서버와 연결이 성사됨
+			2 (loaded)		  - 서버가 request를 받음
+			3 (interactive)	  - request에 대해서 처리하는 중
+			4 (complete)	  - request에 대한 처리가 끝났고 응답을 할 준비가 완료됨
+		*/
+		if(httpRequest.readyState === 4){
+			if(httpRequest.status === 200){
+				// httpRequest.responseText - 서버의 응답을 텍스트 문자열로 반환
+				// httpRequest.responseXML - 서버의 응답을 XML Document 반환
+				var result = httpRequest.responseText;
+				console.log("result : "+result);
+				document.getElementById("box").innerHTML = result;
+			}else{
+				console.log("실패");
+			}
+		}
+	}
+</script>
+<jsp:include page="../common/footer.jsp"/>

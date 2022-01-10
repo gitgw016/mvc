@@ -1,0 +1,70 @@
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.MemberService;
+import service.MemberServiceImpl;
+
+@WebServlet("*.mc")
+public class MemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	MemberService ms = new MemberServiceImpl();
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("get 요청");
+		MemberService.loginCheck(request);
+		
+		String cmd = getCommand(request);
+		
+		String next = null;
+		
+		
+		if(cmd.equals("main.mc")) {
+			next = "/common/main.jsp";
+		}
+		
+		if(cmd.equals("logOut.mc")) {
+			ms.logOut(request, response);
+			next = "/member/login.jsp";
+		}
+		
+		if(next != null) {
+			RequestDispatcher re = request.getRequestDispatcher(next);
+			re.forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		MemberService.loginCheck(request);
+		
+		request.setCharacterEncoding("utf-8");
+		String cmd = getCommand(request);
+		
+		if(cmd.equals("join.mc")) {
+			ms.memberJoin(request, response);
+			return;
+		}
+		
+		if(cmd.equals("logOn.mc")) {
+			ms.memberLogin(request, response);
+			return;
+		}
+	}
+
+	private String getCommand(HttpServletRequest request) {
+		String requestPath = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		String command = requestPath.substring(contextPath.length()+1);
+		return command;
+	}
+}
+

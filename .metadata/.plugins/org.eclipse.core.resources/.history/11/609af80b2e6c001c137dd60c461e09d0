@@ -1,0 +1,22 @@
+package dao;
+
+import vo.MemberVO;
+
+public class MemberDAOImpl implements MemberDAO {
+
+	@Override
+	public boolean memberJoin(MemberVO member) {
+		return false;
+	}
+
+	@Override
+	public MemberVO memberLogin(String id, String pass) {
+		return null;
+	}
+
+	@Override
+	public MemberVO getMemberById(String id) {
+		return null;
+	}
+
+}

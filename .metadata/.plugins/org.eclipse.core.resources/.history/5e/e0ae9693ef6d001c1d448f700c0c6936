@@ -1,0 +1,43 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="../common/header.jsp"/>
+<section>
+	<div>
+		<h1>자바스크립트</h1>
+		<input type="text" name="name" id="name"/> <br/>
+		<input type="number" name="age" id="age"/> <br/>
+		<input type="button" name="btn" id="확인"/> <br/>
+		<div id="box"></div>
+	</div>
+</section>
+<script>
+	/*  Ajax : Asyncronized Javascript And XML
+		전체 페이지를 다시 로드 하지 않고 부분적으로 서버와 데이터를 교환하는 것
+		요청을 하고 응답이 오기를 기다렸다가 다음 작업을 처리하는 방식.
+		비동기적 : 용청을 보내고 응답 결과가 전달되기 전에 바로 다음일을 수행하는 방식
+		ajax의 핵심기술은 마소에서 개발한 XMLHttpRequest
+	*/
+	
+	var httpRequest;
+	document.getElementById("btn").onclick = function(){
+		makeRequest('user.test');
+		console.log('makeRequest function 종료');
+	};
+	
+	function makeRequest(url){
+		httpRequest = new XMLHttpRequest();
+		if(!httpRequest){
+			alert('XMLHttp 객체 ㅇㄷ?');
+			return false;
+		}
+		console.log('생성완료');
+		
+		var name = document.getElementById("name").value;
+		var age = document.getElementById("age").value;
+		
+		httpRequest.open('GET',url+"?name="+name+"&age="+age);
+		httpRequest.send();
+	}
+</script>
+<jsp:include page="../common/footer.jsp"/>

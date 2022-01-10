@@ -1,0 +1,73 @@
+package controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.MemberService;
+import service.QNABoardService;
+import service.QNABoardServiceImpl;
+import vo.BoardVO;
+
+@WebServlet("*.bo")
+public class QNABoardController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	QNABoardService service = new QNABoardServiceImpl();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		// 자동 로그인 쿠키 체크
+		MemberService.loginCheck(request);
+		
+		String command = request.getRequestURI().substring(request.getContextPath().length()+1);
+		
+		String nextPage = null;
+		
+		if(command.equals("boardList.bo")) {
+			// 목록 페이지 요청
+			ArrayList<BoardVO> list = service.getBoardList(request);
+			request.setAttribute("list", list);
+			nextPage = "/board/qna/qna_list.jsp";
+		}else if(command.equals("boardWrite.bo")) {
+			// 목록 작성 페이지 요청
+			nextPage = "/board/qna/qna_write.jsp";
+		}else if(command.equals("boardWriteSubmit.bo")) {
+			System.out.println("게시글 등록 요청 - 원본글");
+			service.boardWrite(request);
+			response.sendRedirect("boardList.bo");
+		}else if(command.equals("boardDetail.bo")) {
+			// 게시글 상세보기 요청
+			// 조회수 증가
+			service.updateReadCount(request);
+			String page = "boardRead.bo?qna_num="+request.getParameter("qna_num");
+			System.out.println("detail : "+page);
+			response.sendRedirect(page);
+		}else if(command.equals("boardRead.bo")) {
+			// 게시물 정보 전달
+			BoardVO vo = service.getBoardVO(request);
+			request.setAttribute("boardVO", vo);
+			nextPage = "/board/qna/qna_detail.jsp";
+		}else if(command.equals("boardReplyForm.bo")) {
+			// 답변글 작성 페이지 요청
+			// 답변을 달려는 원본글의 정보를 가지고 옴.
+			BoardVO boardVO = service.boardReply(request);
+			request.setAttribute("boardVO", boardVO);
+			nextPage = "/board/qna/qna_reply.jsp";
+		}
+		
+		if(nextPage != null) {
+			request.getRequestDispatcher(nextPage).forward(request, response);;
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

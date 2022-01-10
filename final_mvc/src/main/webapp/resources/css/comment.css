@@ -1,0 +1,88 @@
+@charset "UTF-8";
+.commentWrap{
+	width:100%;
+	border:1px solid #ddd;
+	padding:15px;
+	margin-top:15px;
+	box-sizing:border-box;
+}
+
+.commentWriteWrap{
+	border:1px solid #ccc;
+	overflow:hidden;
+}
+
+textarea.comment_content{
+	width:85%;
+	outline:none;
+	border:none;
+	resize:none;
+	font-size:1.1em;
+	color:#333;
+	float:left;
+	height:70px;
+	padding:5px;
+}
+
+.commentWriteWrap input[type='button']{
+	float:right;
+	width:13%;
+	height:80px;
+	font-weight:bolder;
+}
+
+/*댓글 리스트*/
+
+.comments{
+	width: 100%;
+	overflow: hidden;
+}
+
+.commentListWrap{
+	box-sizing:border-box;
+	width:100%;
+	border:1px solid #ddd;
+	padding:15px;
+	margin-top:15px;
+}
+
+.commentListWrap textarea{
+	border:none;
+	resize:none;
+	outline:none;
+	width:100%;
+	font-size:1.2em;
+	color:#333;
+}
+
+.closeBtn{
+	float:right;
+	width:20px;
+	height:20px;
+	border:1px solid #ccc;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	box-sizing:border-box;
+}
+
+.closeBtn:hover{
+	cursor:pointer;
+}
+
+/* 페이징 */
+.pagingWrap{
+	width:100%;
+	text-align:center;
+	margin-top:15px;
+	margin-bottom:50px;
+}
+
+a{
+	text-decoration:none;
+	color:black;
+}
+
+a:hover{
+	color:#888;
+}

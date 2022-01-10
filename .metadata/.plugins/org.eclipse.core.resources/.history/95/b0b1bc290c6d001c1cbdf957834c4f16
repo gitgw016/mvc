@@ -1,0 +1,49 @@
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.MemberService;
+import service.QNABoardService;
+import service.QNABoardServiceImpl;
+
+@WebServlet("*.bo")
+public class QNABoardController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	QNABoardService service = new QNABoardServiceImpl();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		// 자동 로그인 쿠키 체크
+		MemberService.loginCheck(request);
+		
+		String command = request.getRequestURI().substring(request.getContextPath().length()+1);
+		
+		String nextPage = null;
+		
+		if(command.equals("boardList.bo")) {
+			// 목록 페이지 요청
+			nextPage = "/board/qna/qna_list.jsp";
+		}else if(command.equals("boardWrite.bo")) {
+			// 목록 작성 페이지 요청
+			nextPage = "/board/qna/qna_write.jsp";
+		}else if(command.equals("boardWriteSubmit.bo")) {
+			
+		}
+		
+		if(nextPage != null) {
+			request.getRequestDispatcher(nextPage).forward(request, response);;
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

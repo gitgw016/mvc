@@ -1,0 +1,33 @@
+
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("*.test")
+public class AsyncTest extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		String cmd = request.getRequestURL().substring(request.getContextPath().length()+1);
+		String nextPage = null;
+		if(cmd.equals("javascript.test")) {
+			System.out.println(nextPage);
+			nextPage = "/test/javascript.jsp";
+		}else if(cmd.equals("jQuery.test")) {
+			nextPage = "/test/jquery.jsp";
+		}
+		if(nextPage != null) {
+			request.getRequestDispatcher(nextPage).forward(request, response);
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

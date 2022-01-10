@@ -1,0 +1,8 @@
+@charset "UTF-8";
+.commentWrap{
+	width:100%;
+	border:1px solid #ddd;
+	padding:15px;
+	margin-top:15px;
+	box-sizing:border-box;
+}

@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="../../common/header.jsp"/>
+<section>
+	<table>
+		<tr>
+			<th colspan="2"><h2>게시물 상세내용</h2></th>
+		</tr>
+		<tr>
+			<td>작성자</td>
+			<td>${boardVO.qna_name}</td>
+		</tr>
+		<tr>
+			<td>제목</td>
+			<td><c:out value="${boardVO.qna_title}"/></td>
+		</tr>
+	</table>
+</section>
+<jsp:include page="../../common/footer.jsp"/>

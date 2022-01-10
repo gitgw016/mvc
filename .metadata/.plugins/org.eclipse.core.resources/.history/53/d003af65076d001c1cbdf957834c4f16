@@ -1,0 +1,16 @@
+package service;
+
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
+import vo.BoardVO;
+
+public interface QNABoardService {
+
+	// 페이징 처리된 전체 게시물 목록 정보
+	public ArrayList<BoardVO> getBoardList(HttpServletRequest request);
+	
+	// 게시물 등록 요청 - 원본글
+	public void boardWrite(HttpServletRequest request);
+}

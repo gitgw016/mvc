@@ -1,0 +1,19 @@
+package vo;
+
+import java.util.Date;
+
+public class BoardVO {
+	private int qna_num;
+	private String qna_name;
+	private String qna_title;
+	private String qna_content;
+	private String qna_file;
+	private String qna_fie_origin;
+	private int qna_re_ref;
+	private int qna_re_lev;
+	private int qna_re_seq;
+	private int qna_writer_num;
+	private int qna_readcount;
+	private String qna_delete;
+	private Date qna_date;
+}

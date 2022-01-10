@@ -1,0 +1,192 @@
+package service;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.oreilly.servlet.MultipartRequest;
+
+import dao.QNABoardDAO;
+import dao.QNABoardDAOImpl;
+import util.Criteria;
+import util.PageMaker;
+import vo.BoardVO;
+import vo.MemberVO;
+
+public class QNABoardServiceImpl implements QNABoardService {
+	
+	String saveDir = "/resources/upload";
+	
+	QNABoardDAO dao = new QNABoardDAOImpl();
+
+	@Override
+	public ArrayList<BoardVO> getBoardList(HttpServletRequest request) {
+		String page = request.getParameter("page");
+		int paramPage = 1;
+		if(page != null) {
+			paramPage = Integer.parseInt(page);
+		}
+		// qna_board 전체 게시물 수 검색
+		int totalCount = dao.getTotalCount();
+		System.out.println("totalCount : "+totalCount);
+		
+		Criteria cri = new Criteria(paramPage, 5);
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		pm.setTotalCount(totalCount);
+		request.setAttribute("pm", pm);
+		ArrayList<BoardVO> list = dao.getBoardList(cri);
+		return list;
+	}
+
+	@Override
+	public void boardWrite(HttpServletRequest request) {
+		String qna_name = request.getParameter("qna_name");
+		int qna_writer_num = Integer.parseInt(request.getParameter("qna_writer_num"));
+		String qna_title = request.getParameter("qna_title");
+		String qna_content = request.getParameter("qna_content");
+		
+		BoardVO board = new BoardVO();
+		board.setQna_name(qna_name);
+		board.setQna_writer_num(qna_writer_num);
+		board.setQna_title(qna_title);
+		board.setQna_content(qna_content);
+		
+		dao.boardWrite(board);
+	}
+
+	@Override
+	public void boardWriteFile(HttpServletRequest request) {
+		// 파일 정보와 함께 게시글 정보 등록
+		String realPath = request.getServletContext().getRealPath(saveDir);
+		System.out.println("realPath : "+realPath);
+		File f = new File(realPath);
+		if(!f.exists()) {
+			f.mkdirs();
+			System.out.println("폴더 생김");
+		}
+		MultipartRequest multi = new MultipartRequest();
+	}
+
+	@Override
+	public BoardVO getBoardVO(HttpServletRequest request) {
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		return dao.getBoardVO(qna_num);
+	}
+
+	@Override
+	public void updateReadCount(HttpServletRequest request) {
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		dao.updateReadCount(qna_num);
+	}
+
+	@Override
+	public void fileDown(HttpServletRequest request, HttpServletResponse response) {
+
+	}
+
+	@Override
+	public BoardVO boardReply(HttpServletRequest request) {
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		return dao.getBoardVO(qna_num);
+	}
+
+	@Override
+	public BoardVO boardReplySubmit(HttpServletRequest request) {
+		int qna_writer_num = Integer.parseInt(request.getParameter("qna_writer_num"));
+		String qna_name = request.getParameter("qna_name");
+		String qna_title = request.getParameter("qna_title");
+		String qna_content = request.getParameter("qna_content");
+		int qna_re_ref = Integer.parseInt(request.getParameter("qna_re_ref"));
+		int qna_re_lev = Integer.parseInt(request.getParameter("qna_re_lev"));
+		int qna_re_seq = Integer.parseInt(request.getParameter("qna_re_seq"));
+		BoardVO board = new BoardVO();
+		board.setQna_name(qna_name);
+		board.setQna_title(qna_title);
+		board.setQna_content(qna_content);
+		board.setQna_re_ref(qna_re_ref);
+		board.setQna_re_lev(qna_re_lev);
+		board.setQna_re_seq(qna_re_seq);
+		board.setQna_writer_num(qna_writer_num);
+		System.out.println(board);
+		dao.boardReplySubmit(board);
+		return null;
+	}
+
+	@Override
+	public BoardVO getBoardVOByUpdate(HttpServletRequest request) {
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		return dao.getBoardVO(qna_num);
+	}
+
+	@Override
+	public void boardUpdate(HttpServletRequest request, HttpServletResponse response) {
+		// 게시글 수정 요청 Service
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		String qna_name = request.getParameter("qna_name");
+		String qna_title = request.getParameter("qna_title");
+		String qna_content = request.getParameter("qna_content");
+		int qna_writer_num = Integer.parseInt(request.getParameter("qna_writer_num"));
+		
+		BoardVO vo = dao.getBoardVO(qna_num);
+		if(vo.getQna_writer_num() != qna_writer_num) {
+			try {
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.print("<script>");
+				out.print("alert('불가능 ㅅㄱ')");
+				out.print("history.go(-1);");
+				out.print("</script>");
+				return;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		vo.setQna_name(qna_name);
+		vo.setQna_title(qna_title);
+		vo.setQna_content(qna_content);
+		
+		try {
+			boolean isSuccess = dao.boardUpdate(vo);
+			if(!isSuccess) {
+				response.sendRedirect("boardUpdateForm.bo?qna_num="+qna_num);
+				return;
+			}
+			response.sendRedirect("boardRead.bo?qna_num="+qna_num);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void boardDelete(HttpServletRequest request, HttpServletResponse response) {
+		// 게시글 삭제요청 Service
+		int qna_num = Integer.parseInt(request.getParameter("qna_num"));
+		MemberVO vo = (MemberVO)request.getSession().getAttribute("member");
+		try {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			if(vo == null) {
+				out.print("<script>");
+				out.print("alert('로그인 먼저 하라');");
+				out.print("location.href='login.mc';");
+				out.print("</script>");
+				return;
+			}
+			
+			boolean isSuccess = dao.boardDelete(qna_num, vo.getNum());
+			if(isSuccess) {
+				response.sendRedirect("boardList.bo");
+			}else {
+				response.sendRedirect("boardRead.bo?qna_num="+qna_num);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

@@ -1,0 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="../../common/header.jsp"/>
+<section>
+	<div>
+		<h1>자바스크립트</h1>
+		<input type="text" name="name" id="name"/> <br/>
+		<input type="number" name="age" id="age"/> <br/>
+	</div>
+</section>
+<jsp:include page="../../common/footer.jsp"/>

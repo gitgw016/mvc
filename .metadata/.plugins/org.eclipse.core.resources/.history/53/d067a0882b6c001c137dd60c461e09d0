@@ -1,0 +1,28 @@
+package service;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class MemberServiceImpl implements MemberService {
+
+	@Override
+	public void memberJoin(HttpServletRequest requst, HttpServletResponse response) throws IOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean memberLogin(HttpServletRequest requst, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void logOut(HttpServletRequest requst, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

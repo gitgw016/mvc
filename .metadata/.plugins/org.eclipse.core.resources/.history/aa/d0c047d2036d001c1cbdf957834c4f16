@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="../../common/header.jsp"/>
+<section>
+	<form action="" method="post">
+		<table>
+			<tr>
+				<td colspan="2"><h1>글 작성</h1></td>
+			</tr>
+		</table>
+	</form>
+</section>
+<jsp:include page="../../common/footer.jsp"/>

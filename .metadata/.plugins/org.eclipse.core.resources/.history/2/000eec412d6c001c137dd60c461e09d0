@@ -1,0 +1,25 @@
+package service;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class MemberServiceImpl implements MemberService {
+
+	@Override
+	public void memberJoin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String id = request.getParameter("id");
+	}
+
+	@Override
+	public boolean memberLogin(HttpServletRequest request, HttpServletResponse response) {
+		return false;
+	}
+
+	@Override
+	public void logOut(HttpServletRequest request, HttpServletResponse response) {
+
+	}
+
+}

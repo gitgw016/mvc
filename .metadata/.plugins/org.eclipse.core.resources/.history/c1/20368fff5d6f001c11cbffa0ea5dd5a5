@@ -1,0 +1,47 @@
+@charset "UTF-8";
+.commentWrap{
+	width:100%;
+	border:1px solid #ddd;
+	padding:15px;
+	margin-top:15px;
+	box-sizing:border-box;
+}
+
+.commentWriteWrap{
+	border:1px solid #ccc;
+	overflow:hidden;
+}
+
+textarea.comment_content{
+	width:85%;
+	outline:none;
+	border:none;
+	resize:none;
+	font-size:1.1em;
+	color:#333;
+	float:left;
+	height:70px;
+	padding:5px;
+}
+
+.commentWriteWrap input[type='button']{
+	float:right;
+	width:13%;
+	height:80px;
+	font-weight:bolder;
+}
+
+/*댓글 리스트*/
+
+.comments{
+	width: 100%;
+	overflow: hidden;
+}
+
+.commentListWrap{
+	box-sizing:border-box;
+	width:100%;
+	border:1px solid #ddd;
+	padding:15px;
+	margin-top:15px;
+}
